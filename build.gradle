@@ -1,0 +1,63 @@
+buildscript {
+    repositories {
+        maven { url = 'https://maven.minecraftforge.net/' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.spongepowered:mixingradle:0.7.38'
+    }
+}
+
+plugins {
+    id 'net.minecraftforge.gradle' version '[6.0.24,6.2)'
+}
+
+apply plugin: 'org.spongepowered.mixin'
+
+version = '1.0.0'
+group = 'net.erutobusiness'
+base { archivesName = 'yeastnfeast_jamfix' }
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+minecraft {
+    mappings channel: 'official', version: '1.20.1'
+}
+
+mixin {
+    add sourceSets.main, 'yeastnfeastjamfix.refmap.json'
+    config 'yeastnfeastjamfix.mixins.json'
+}
+
+repositories {
+    // MOD の依存を取る maven。手元に jar を置かずに済ませるため（tide_tooltip_guard と同じ）
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+        content { includeGroup "maven.modrinth" }
+    }
+}
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.20.1-47.3.0'
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    // Mixin のターゲット解決用。実行時は同梱しない（利用者が入れている本体に当てる）。
+    // ⚠ 版の文字列は Modrinth の version_number をそのまま使う（`1.0.0-1.20.1+forge`）。
+    compileOnly "maven.modrinth:yeast-n-feast:1.0.0-1.20.1+forge"
+}
+
+jar {
+    manifest {
+        attributes([
+            'Specification-Title'   : 'yeastnfeast_jamfix',
+            'Specification-Version' : '1',
+            'Implementation-Title'  : 'Yeast \'n Feast Jam Fix',
+            'Implementation-Version': project.version,
+            'MixinConfigs'          : 'yeastnfeastjamfix.mixins.json'
+        ])
+    }
+}

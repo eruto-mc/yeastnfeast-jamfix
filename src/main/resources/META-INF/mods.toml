@@ -1,0 +1,55 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="MIT"
+issueTrackerURL="https://github.com/erutobusiness"
+
+[[mixins]]
+config="yeastnfeastjamfix.mixins.json"
+
+[[mods]]
+modId="yeastnfeastjamfix"
+version="1.0.0"
+displayName="Yeast 'n Feast Jam Fix"
+authors="erutobusiness"
+description='''
+Stops Yeast 'n Feast from disconnecting a player who finishes eating a jam.
+
+When an item finishes being eaten, ConsumableItem#getReturnContainer decides which empty
+container to hand back:
+
+    stack.is(MOLASSES) || stack.is(MAPLE_SYRUP) || stack.is(GINGER_TEA) ? glass bottle : jar
+
+ModItems.GINGER_TEA is only registered inside if (ModList.isLoaded("farmersdelight")), so on a
+pack without Farmer's Delight the field stays null while that check dereferences it anyway.
+Molasses and maple syrup return on the first two branches, so every other ConsumableItem - all
+twelve jams - throws a NullPointerException inside "Ticking player" and the player is dropped
+with "Internal server error".
+
+This mod replaces that check with the same decision minus the branch that can be null. If
+GINGER_TEA is not null it does nothing at all, so installing Farmer's Delight or an upstream fix
+makes this mod inert rather than conflicting with it.
+
+Measured on 2026-09-01: a vanilla golden apple and yeastnfeast:molasses were eaten normally,
+yeastnfeast:lemon_jam disconnected the player. Apple jam is not special - any jam does it.
+'''
+
+[[dependencies.yeastnfeastjamfix]]
+    modId="forge"
+    mandatory=true
+    versionRange="[47,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.yeastnfeastjamfix]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.20.1,1.20.2)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.yeastnfeastjamfix]]
+    modId="yeastnfeast"
+    mandatory=true
+    versionRange="[0,)"
+    ordering="AFTER"
+    side="BOTH"

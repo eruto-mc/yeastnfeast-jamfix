@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.erutobusiness.yeastnfeastjamfix.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "yeastnfeastjamfix.refmap.json",
+  "mixins": [
+    "ConsumableItemMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
