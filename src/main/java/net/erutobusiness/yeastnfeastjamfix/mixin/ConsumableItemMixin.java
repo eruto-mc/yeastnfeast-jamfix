@@ -31,10 +31,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * {@code NullPointerException} → {@code ReportedException: Ticking player} →
  * その人だけ {@code Internal server error} で切断される。
  *
- * <p><b>実測</b>（2026-09-01・当部の試験サーバ、台本 {@code yeastnfeast-jam-eat}）:
+ * <p><b>実測</b>（2026-09-01・専用サーバに自動操作のクライアントを繋いで確認）:
  * バニラの金リンゴと {@code yeastnfeast:molasses} は食べ終わり、
  * {@code yeastnfeast:lemon_jam} を食べた瞬間に切断された。
- * アップルジャムを1つも出していない台本でも同じ例外が出たので、
+ * アップルジャムを1つも出していない手順でも同じ例外が出たので、
  * <b>特定のジャムに固有ではない</b>。
  *
  * <p><b>対処</b>: null になる枝だけを外した同じ判定に差し替える。
